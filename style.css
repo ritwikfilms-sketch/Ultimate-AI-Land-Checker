@@ -1,0 +1,116 @@
+Ultimate-AI-Land-Checker/      ← Root folder
+├─ index.html                  # Main HTML page
+├─ style.css                   # Styling
+├─ script.js                   # JS logic (land checker, voice, AI image)
+├─ README.md                   # Project description
+├─ .env                        # Environment variables (OpenAI key, email)
+└─ backend/                    # Backend folder for paid alerts & AI image
+    ├─ server.js               # Node.js backend
+    └─ package.json            # Backend dependencies<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate AI Land Checker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🌍 Ultimate AI Land Checker</h1>
+
+<div class="box">
+  <h2>🏡 Land Price Analyzer</h2>
+  <input type="number" id="size" placeholder="Land Size (sqft)">
+  <input type="number" id="price" placeholder="Expected Price">
+  <button onclick="checkLand()">Analyze</button>
+  <div id="result"></div>
+</div>
+
+<hr>
+
+<div class="box">
+  <h2>🎤 Voice Assistant</h2>
+  <textarea id="voiceText" placeholder="Type text for voice..."></textarea>
+  <button onclick="speak('male')">Speak Male</button>
+  <button onclick="speak('female')">Speak Female</button>
+</div>
+
+<hr>
+
+<div class="box">
+  <h2>🖼 AI Image Generator</h2>
+  <input type="text" id="imgPrompt" placeholder="Enter image prompt">
+  <button onclick="generateImage()">Generate Image</button>
+  <div id="imageResult"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+h1, h2 { margin-bottom: 15px; text-shadow: 0 0 10px #00ffcc; }
+.box { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; max-width: 550px; margin: 20px auto; box-shadow: 0 0 20px rgba(0,255,204,0.5); }
+input, textarea { width: 90%; padding: 10px; margin: 10px 0; border-radius: 8px; border: none; }
+button { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; background: #00ffcc; font-weight: bold; margin: 5px; }
+#result { margin-top: 20px; font-size: 18px; }
+#imageResult img { margin-top: 15px; max-width: 100%; border-radius: 10px; }// ----- Land Checker -----
+function checkLand() {
+  let size = document.getElementById("size").value;
+  let price = document.getElementById("price").value;
+  if(size === "" || price === "") {
+    document.getElementById("result").innerHTML = "⚠️ Please fill all fields.";
+    return;
+  }
+  let rate = price / size;
+  let result = "";
+  if(rate < 500) result = "🔥 Great Deal! Good Investment Opportunity.";
+  else if(rate < 1000) result = "⚖️ Average Market Value.";
+  else result = "⚠️ Overpriced Property. Reconsider.";
+  document.getElementById("result").innerHTML = result;
+}
+
+// ----- Voice Assistant -----
+function speak(gender) {
+  const text = document.getElementById("voiceText").value;
+  if(!text) return alert("⚠️ Please enter text for voice.");
+  const utterance = new SpeechSynthesisUtterance(text);
+  const plan = 'paid'; // Free/Paid logic
+  utterance.lang = plan === 'paid' ? 'hi-IN' : 'en-US';
+  if(gender==='female') utterance.voice = speechSynthesis.getVoices().find(v=>v.name.includes('Female'))||null;
+  if(gender==='male') utterance.voice = speechSynthesis.getVoices().find(v=>v.name.includes('Male'))||null;
+  speechSynthesis.speak(utterance);
+}
+
+// ----- AI Image Generator -----
+async function generateImage() {
+  const prompt = document.getElementById("imgPrompt").value;
+  if(!prompt) return alert("⚠️ Please enter a prompt.");
+  const imgContainer = document.getElementById("imageResult");
+  imgContainer.innerHTML = "🕒 Generating...";
+  try {
+    const res = await fetch("/generate-image", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({prompt})
+    });
+    const data = await res.json();
+    imgContainer.innerHTML = ⁠ <img src="${data.url}" alt="AI Image"> ⁠;
+  } catch(err) {
+    imgContainer.innerHTML = "⚠️ Failed to generate image.";
+    console.error(err);
+  }
+}
+
+// ----- Paid Alerts -----
+function notifyPaidUser(message) {
+  fetch("/notify", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:"paiduser@example.com", message})
+  });
+}
