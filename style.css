@@ -1,12 +1,21 @@
-Ultimate-AI-Land-Checker/      ← Root folder
-├─ index.html                  # Main HTML page
-├─ style.css                   # Styling
-├─ script.js                   # JS logic (land checker, voice, AI image)
-├─ README.md                   # Project description
-├─ .env                        # Environment variables (OpenAI key, email)
-└─ backend/                    # Backend folder for paid alerts & AI image
-    ├─ server.js               # Node.js backend
-    └─ package.json            # Backend dependencies<!DOCTYPE html>
+Ultimate-AI-Land-Checker/
+├─ index.html
+├─ style.css
+├─ script.js
+├─ README.md
+├─ LICENSE
+├─ .env
+├─ .gitignore
+├─ old_versions/
+│   ├─ index_old.html
+│   ├─ script_old.js
+│   └─ style_old.css
+├─ backend/
+│   ├─ server.js
+│   └─ package.json
+└─ .github/
+    └─ workflows/
+        └─ pages.yml<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -46,7 +55,7 @@ Ultimate-AI-Land-Checker/      ← Root folder
 
 <script src="script.js"></script>
 </body>
-</html>body {
+</html>[18/02/26, 9:30:48 PM] ritwikspandey: body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
@@ -58,7 +67,8 @@ h1, h2 { margin-bottom: 15px; text-shadow: 0 0 10px #00ffcc; }
 input, textarea { width: 90%; padding: 10px; margin: 10px 0; border-radius: 8px; border: none; }
 button { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; background: #00ffcc; font-weight: bold; margin: 5px; }
 #result { margin-top: 20px; font-size: 18px; }
-#imageResult img { margin-top: 15px; max-width: 100%; border-radius: 10px; }// ----- Land Checker -----
+#imageResult img { margin-top: 15px; max-width: 100%; border-radius: 10px; }
+[18/02/26, 9:31:05 PM] ritwikspandey// Land Checker
 function checkLand() {
   let size = document.getElementById("size").value;
   let price = document.getElementById("price").value;
@@ -74,19 +84,19 @@ function checkLand() {
   document.getElementById("result").innerHTML = result;
 }
 
-// ----- Voice Assistant -----
+// Voice Assistant
 function speak(gender) {
   const text = document.getElementById("voiceText").value;
   if(!text) return alert("⚠️ Please enter text for voice.");
   const utterance = new SpeechSynthesisUtterance(text);
-  const plan = 'paid'; // Free/Paid logic
+  const plan = 'paid';
   utterance.lang = plan === 'paid' ? 'hi-IN' : 'en-US';
   if(gender==='female') utterance.voice = speechSynthesis.getVoices().find(v=>v.name.includes('Female'))||null;
   if(gender==='male') utterance.voice = speechSynthesis.getVoices().find(v=>v.name.includes('Male'))||null;
   speechSynthesis.speak(utterance);
 }
 
-// ----- AI Image Generator -----
+// AI Image Generator
 async function generateImage() {
   const prompt = document.getElementById("imgPrompt").value;
   if(!prompt) return alert("⚠️ Please enter a prompt.");
@@ -106,11 +116,46 @@ async function generateImage() {
   }
 }
 
-// ----- Paid Alerts -----
+// Paid Alerts
 function notifyPaidUser(message) {
   fetch("/notify", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({email:"paiduser@example.com", message})
   });
-}
+}const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/notify', (req, res) => {
+  const { email, message } = req.body;
+  console.log(⁠ Notify ${email}: ${message} ⁠);
+  res.send({ status: 'success' });
+});
+
+app.post('/generate-image', async (req, res) => {
+  const { prompt } = req.body;
+  res.send({ url: "https://via.placeholder.com/400x300?text=AI+Image" });
+});
+
+app.listen(4000, () => console.log("Backend running at http://localhost:4000"));{
+  "name": "ultimate-ai-land-checker-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": { "express": "^4.18.2" },
+  "scripts": { "start": "node server.js" }
+}{
+  "name": "ultimate-ai-land-checker-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": { "express": "^4.18.2" },
+  "scripts": { "start": "node server.js" }
+}{
+  "name": "ultimate-ai-land-checker-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": { "express": "^4.18.2" },
+  "scripts": { "start": "node server.js" }
+}3.⁠ ⁠Fill ⁠ .env ⁠ with OpenAI & email keys
+4.⁠ ⁠Open ⁠ index.html ⁠ in browser3.⁠ ⁠Fill ⁠ .env ⁠ with OpenAI & email keys
+4.⁠ ⁠Open ⁠ index.html ⁠ in browser
